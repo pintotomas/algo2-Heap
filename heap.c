@@ -102,3 +102,14 @@ void downheap(heap_t* heap,size_t elemento_actual){
 	return downheap(heap, mayor);
 	
 }
+
+
+void *heap_desencolar(heap_t *heap){
+	if(heap_esta_vacio(heap)){
+		return NULL;
+	}
+	void *dato = heap->datos[0];
+	heap->datos[0] = heap->datos[heap->cantidad_elementos - 1];
+	heap->datos[heap->cantidad_elementos - 1] = NULL;
+	downheap(heap, 0);
+}
