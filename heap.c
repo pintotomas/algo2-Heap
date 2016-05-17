@@ -82,8 +82,8 @@ void downheap(heap_t* heap,size_t elemento_actual){
 	if(elemento_actual == heap->cantidado_elementos-1){
 		return;
 	}
-	size_t hijo_der =
-	size_t hijo_izq =
+	size_t hijo_der = elemento_actual * 2 + 1;
+	size_t hijo_izq = elemento_actual * 2 + 2;
 	size_t mayor; 
 	if(heap->comparar_prioridad(heap->datos[elemento_actual], heap->datos[hijo_izq]) < 0){
 		if((heap->comparar_prioridad(heap->datos[elemento_actual], heap->datos[hijo_der]) < 0) && (heap_comparar_prioridad(heap->datos[hijo_der], heap->datos[hijo_izq]) > 0)){
