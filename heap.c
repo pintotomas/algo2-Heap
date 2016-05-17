@@ -75,3 +75,30 @@ void *heap_ver_max(const heap_t *heap)
 		{return NULL;}
 	return heap->datos[0];
 }
+
+
+
+void downheap(heap_t* heap,size_t elemento_actual){
+	if(elemento_actual == heap->cantidado_elementos-1){
+		return;
+	}
+	size_t hijo_der =
+	size_t hijo_izq =
+	size_t mayor; 
+	if(heap->comparar_prioridad(heap->datos[elemento_actual], heap->datos[hijo_izq]) < 0){
+		if((heap->comparar_prioridad(heap->datos[elemento_actual], heap->datos[hijo_der]) < 0) && (heap_comparar_prioridad(heap->datos[hijo_der], heap->datos[hijo_izq]) > 0)){
+			mayor = hijo_der;
+		}else{
+			mayor = hijo_izq;
+		}
+	}else if(heap->comparar_prioridad(heap->datos[elemento_actual], heap->datos[hijo_der]) < 0){
+		mayor = hijo_der;
+	}else{
+		return;
+	}
+	void *aux = heap->datos[elemento_actual];
+	heap->datos[elemento_actual] = heap->datos[mayor];
+	heap->datos[mayor] = aux;
+	return downheap(heap, mayor);
+	
+}
