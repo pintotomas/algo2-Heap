@@ -180,11 +180,14 @@ heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
 	if(heap == NULL){
 		return NULL;
 	}
-	void *copia[n] = arreglo;
-	heapify(copia, n, cmp);
+	void *copia = malloc(n * sizeof(void));
+	copia = arreglo;
 	for(size_t i = 0, i < n, i++){
 		heap->datos[i] = copia[i];
 	}
+	heapify(heap->datos, n, cmp);
+	heap->cantidad_elementos = n;
+	free(copia);
 	return heap;
 }
 
