@@ -170,3 +170,21 @@ void heapify(void* arreglo[],size_t cantidad_elementos,cmp_func_t comparar_prior
 	int inicio = (int)cantidad_elementos;
 	for (int i = inicio-1; i >= 0; i--)
 		{downheap(arreglo,comparar_prioridad,cantidad_elementos,i);}
+void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp)
+{
+
+	int ultimo = ((int)cant)-1;
+    heapify(elementos,cant,cmp);
+
+	int primero = 0;
+	while (ultimo >= 0)
+	{
+        void* aux = elementos[primero];
+		elementos[primero] = elementos[ultimo];
+		elementos[ultimo] = aux;
+		ultimo--;
+		if (ultimo < 0) {break;}
+        downheap(elementos,cmp,ultimo+1,primero);
+	}
+	return;
+}
