@@ -176,10 +176,13 @@ void *heap_desencolar(heap_t *heap)
 }
 
 heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
-	heap_t *heap = heap_crear(cmp);
-	if(heap == NULL){
-		return NULL;
-	}
+	heap_t *heap = malloc(sizeof(heap_t));
+	void** datos = malloc(sizeof(void*)*n);
+	if (!heap || !datos)
+		{return NULL;}
+	heap_nuevo->datos = datos;
+	heap_nuevo->capacidad = n;
+	heap_nuevo->comparar_prioridad = cmp;
 	void *copia = malloc(n * sizeof(void));
 	copia = arreglo;
 	for(size_t i = 0, i < n, i++){
