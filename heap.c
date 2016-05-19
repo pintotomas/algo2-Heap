@@ -103,13 +103,59 @@ void downheap(heap_t* heap,size_t elemento_actual){
 	
 }
 
-
-void *heap_desencolar(heap_t *heap){
-	if(heap_esta_vacio(heap)){
-		return NULL;
+void downheap(void **datos,cmp_func_t comparar_prioridad,size_t cantidad_elementos, size_t posicion_actual)
+{	size_t pos_h_izquierdo = (2*posicion_actual)+1;
+	size_t pos_h_derecho = (2*posicion_actual)+2;
+    if (pos_h_izquierdo >= cantidad_elementos) //Arbol izquierdista
+       {return;}
+	else if (pos_h_derecho >= cantidad_elementos) //Solo un hijo izquierdo
+	{
+		if (comparar_prioridad(datos[posicion_actual],datos[pos_h_izquierdo]) == -1) 
+		{
+			void* aux = datos[posicion_actual];
+			datos[posicion_actual] =  datos[pos_h_izquierdo];
+			datos[pos_h_izquierdo] = aux;
+			downheap(datos,comparar_prioridad,cantidad_elementos,pos_h_izquierdo);
+		}
 	}
-	void *dato = heap->datos[0];
-	heap->datos[0] = heap->datos[heap->cantidad_elementos - 1];
-	heap->datos[heap->cantidad_elementos - 1] = NULL;
-	downheap(heap, 0);
+	else //Hay dos hijos
+	{
+		if ((comparar_prioridad(datos[posicion_actual],datos[pos_h_derecho])) > 0)
+			{
+				if ((comparar_prioridad(datos[posicion_actual],datos[pos_h_izquierdo])) > 0)
+				{return;}
+			}
+		size_t pos_prioritaria = pos_h_izquierdo;
+		if ((comparar_prioridad(datos[pos_h_izquierdo],datos[pos_h_derecho]) < 0))
+		    {pos_prioritaria = pos_h_derecho;}
+		void* aux = datos[posicion_actual];
+		datos[posicion_actual] = datos[pos_prioritaria];
+		datos[pos_prioritaria] = aux;	
+		downheap(datos,comparar_prioridad,cantidad_elementos,pos_prioritaria);
+	}
 }
+
+void *heap_desencolar(heap_t *heap)
+{
+	if (heap_esta_vacio(heap))
+		{return NULL;}
+	void *primero = heap->datos[0];
+	heap->datos[0] = heap->datos[heap->cantidad_elementos-1];
+	heap->cantidad_elementos--;
+	downheap(heap->datos,heap->comparar_prioridad,heap->cantidad_elementos,0);
+	if (heap->capacidad != TAMANO_INICIAL)
+	{
+		size_t capacidad = heap->capacidad;
+		size_t cantidad = heap->cantidad_elementos;
+		size_t resultado = redondear_div(capacidad,4);
+		if (cantidad <= resultado)
+			{heap_redimensionar(heap,capacidad/DOBLE);}
+	}
+	return primero;
+}
+
+void heapify(void* arreglo[],size_t cantidad_elementos,cmp_func_t comparar_prioridad )
+{
+	int inicio = (int)cantidad_elementos;
+	for (int i = inicio-1; i >= 0; i--)
+		{downheap(arreglo,comparar_prioridad,cantidad_elementos,i);}
