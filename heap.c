@@ -44,6 +44,25 @@ bool heap_esta_vacio(const heap_t *heap)
 
 size_t heap_cantidad(const heap_t *heap)
 	{return heap->cantidad_elementos;}
+	
+/*
+  Pre: Recibe un puntero a un heap ya creado y tam_nuevo del
+	   tipo size_t
+
+  Post: Devuelve true si se pudo redimensionar la pila a tamano
+        tam_nuevo, caso contrario, false
+*/
+
+bool heap_redimensionar(heap_t* heap, size_t nuevo_tam)
+{
+ 	void** datos_nuevo = realloc(heap->datos,(sizeof(void*))*nuevo_tam);
+ 	if (!datos_nuevo){
+ 		return false;
+	 	}
+	heap->datos = datos_nuevo;
+	heap->capacidad = nuevo_tam;
+	return true;
+}
 											
 void upheap(heap_t* heap,size_t elemento_actual)
 {
@@ -61,11 +80,13 @@ void upheap(heap_t* heap,size_t elemento_actual)
 		return upheap(heap,padre_actual);
 	}
 }
-bool heap_encolar(heap_t *heap, void *elem) 
+bool heap_encolar(heap_t *heap, void *elem)
 {
-	heap->datos[heap->cantidad_elementos] = elem; 
-	upheap(heap,heap->cantidad_elementos);
+	heap->datos[heap->cantidad_elementos] = elem;
+	upheap(heap->datos,heap->comparar_prioridad,0,heap->cantidad_elementos);
 	heap->cantidad_elementos++;
+	if (heap->cantidad_elementos == heap->capacidad)
+		{heap_redimensionar(heap,DOBLE*heap->capacidad);}
 	return true;
 }
 
