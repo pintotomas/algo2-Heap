@@ -154,6 +154,17 @@ void *heap_desencolar(heap_t *heap)
 	return primero;
 }
 
+heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
+	heap_t *heap = heap_crear(cmp);
+	if(heap == NULL){
+		return NULL;
+	}
+	for(size_t i = 0, i < n, i++){
+		heap_encolar(heap, arreglo[i]);
+	}
+	return heap;
+}
+
 void heapify(void* arreglo[],size_t cantidad_elementos,cmp_func_t comparar_prioridad )
 {
 	int inicio = (int)cantidad_elementos;
